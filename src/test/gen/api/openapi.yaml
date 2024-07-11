@@ -1,0 +1,451 @@
+openapi: 3.0.1
+info:
+  description: "API for managing the bookstore's inventory, available authors, and\
+    \ customer orders"
+  title: Bookstore API
+  version: 1.0.0
+servers:
+- url: http://localhost:8080/api/v1
+tags:
+- description: Everything about the author
+  name: Author
+- description: Access to bookstore's books
+  name: Books
+- description: Bookstore's orders
+  name: Orders
+paths:
+  /authors:
+    get:
+      responses:
+        "200":
+          description: Authors found
+        "404":
+          description: No authors found
+      summary: List all authors
+      tags:
+      - Author
+      x-accepts: application/json
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Author'
+        required: true
+      responses:
+        "200":
+          description: Author created
+        "409":
+          description: Author not created
+      summary: Create a new author
+      tags:
+      - Author
+      x-content-type: application/json
+      x-accepts: application/json
+  /authors/{id}:
+    delete:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "204":
+          description: Author deleted
+        "404":
+          description: Author not deleted
+      summary: Delete an author
+      tags:
+      - Author
+      x-accepts: application/json
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          description: Author found
+        "404":
+          description: Author not found
+      summary: Retrieve an author by their ID
+      tags:
+      - Author
+      x-accepts: application/json
+    put:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Author'
+        required: true
+      responses:
+        "200":
+          description: Author updated
+        "404":
+          description: Author not updated
+      summary: Update an existing author
+      tags:
+      - Author
+      x-content-type: application/json
+      x-accepts: application/json
+  /authors/{id}/books:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          description: Books found by author
+        "404":
+          description: Books by author not Found
+      summary: List all books written by a specific author
+      tags:
+      - Author
+      x-accepts: application/json
+  /books:
+    get:
+      responses:
+        "200":
+          description: Books Found
+        "404":
+          description: No books found
+      summary: List all books
+      tags:
+      - Books
+      x-accepts: application/json
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+        required: true
+      responses:
+        "201":
+          description: Book created
+        "400":
+          description: Book not created
+      summary: Create a new book
+      tags:
+      - Books
+      x-content-type: application/json
+      x-accepts: application/json
+  /books/{ISBN}:
+    delete:
+      parameters:
+      - explode: false
+        in: path
+        name: ISBN
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: Book deleted
+        "404":
+          description: Book not deleted
+      summary: Delete a book
+      tags:
+      - Books
+      x-accepts: application/json
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: ISBN
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: Book found
+        "404":
+          description: Book not found
+      summary: Retrieve a book by ISBN
+      tags:
+      - Books
+      x-accepts: application/json
+    put:
+      parameters:
+      - explode: false
+        in: path
+        name: ISBN
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+        required: true
+      responses:
+        "200":
+          description: Book updated
+        "404":
+          description: Book not updated
+      summary: Update an existing book
+      tags:
+      - Books
+      x-content-type: application/json
+      x-accepts: application/json
+  /books/{ISBN}/authors:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: ISBN
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: All authors of the Book
+        "404":
+          description: No Authors of this Book are listed
+      summary: List all authors of a book
+      tags:
+      - Books
+      x-accepts: application/json
+  /books/{ISBN}/orders:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: ISBN
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: All orders with the book
+        "404":
+          description: There are no orders with this book
+      summary: List all orders containing a specific book
+      tags:
+      - Books
+      x-accepts: application/json
+  /orders:
+    get:
+      responses:
+        "200":
+          description: Orders found
+        "404":
+          description: No orders found
+      summary: List all orders
+      tags:
+      - Orders
+      x-accepts: application/json
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+        required: true
+      responses:
+        "201":
+          description: Order made
+        "400":
+          description: Order not made
+      summary: Create a new order
+      tags:
+      - Orders
+      x-content-type: application/json
+      x-accepts: application/json
+  /orders/{id}:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          description: Order found
+        "404":
+          description: Order not found
+      summary: Retrieve an order by its ID
+      tags:
+      - Orders
+      x-accepts: application/json
+    put:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+        required: true
+      responses:
+        "200":
+          description: Order updated
+        "404":
+          description: Order not updated
+      summary: Update an existing order
+      tags:
+      - Orders
+      x-content-type: application/json
+      x-accepts: application/json
+  /orders/{id}/books:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          description: Order Found
+        "404":
+          description: No books found in the order
+      summary: List all books in an order
+      tags:
+      - Orders
+      x-accepts: application/json
+  /orders/{id}/books/{ISBN}:
+    delete:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      - explode: false
+        in: path
+        name: ISBN
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: Book removed from the order
+        "404":
+          description: No book was removed from this order
+      summary: Remove a book from an existing order
+      tags:
+      - Orders
+      x-accepts: application/json
+    post:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      - explode: false
+        in: path
+        name: ISBN
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+        required: true
+      responses:
+        "201":
+          description: Books added to the order
+        "404":
+          description: No book added to this order
+      summary: Add a book to an existing order
+      tags:
+      - Orders
+      x-content-type: application/json
+      x-accepts: application/json
+components:
+  schemas:
+    Author:
+      example:
+        birthyear: 6
+        nationality: nationality
+        name: name
+        id: 0
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        birthyear:
+          type: integer
+        nationality:
+          type: string
+      type: object
+    Book:
+      example:
+        ISBN: ISBN
+        price: 6.027456183070403
+        publicationYear: 0
+        title: title
+      properties:
+        ISBN:
+          type: string
+        title:
+          type: string
+        publicationYear:
+          type: integer
+        price:
+          type: number
+      type: object
+    Order:
+      example:
+        datetime: 2000-01-23T04:56:07.000+00:00
+        id: 0
+        customerName: customerName
+      properties:
+        id:
+          type: integer
+        datetime:
+          format: date-time
+          type: string
+        customerName:
+          type: string
+      type: object
+
